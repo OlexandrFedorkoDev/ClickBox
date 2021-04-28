@@ -4,6 +4,7 @@ let $time = document.querySelector('#time')
 let $result = document.querySelector('#result')
 let $timeHeader = document.querySelector('#time-header')
 let $resultHeader = document.querySelector('#result-header')
+let $gameTime = document.querySelector('#game-time')
 
 
 
@@ -12,16 +13,24 @@ let isGameStarted = false
 
 $start.addEventListener('click', startGame)
 $game.addEventListener('click', handleBoxClick)
+$gameTime.addEventListener('input', setGameTime)
+
+function show($el) {
+    $el.classList.remove('hide')
+}
+function hide($el) {
+    $el.classList.add('hide')
+}
 
 
 function startGame() {
     score = 0
     setGameTime()
-    $timeHeader.classList.remove('hide')
-    $resultHeader.classList.add('hide')
+    $gameTime.setAttribute('disabled', 'true')
+
     isGameStarted = true
     $game.style.backgroundColor = '#fff'
-    $start.classList.add('hide')
+    hide($start)
 
     let interval = setInterval(function () {
         let time = parseFloat($time.textContent)
@@ -39,21 +48,26 @@ function startGame() {
 
 function setGmaeScore() {
     $result.textContent = score.toString()
+
 }
 
 function setGameTime() {
-    let time = 5;
-    $time.textContent = time.toFixed(1);
+    let time = +$gameTime.value;
+    // $time.textContent = time;
+    $time.textContent = time.toFixed(1)
+    hide($resultHeader)
+    show($timeHeader)
 }
 
 function endGame() {
     isGameStarted = false
+    $gameTime.removeAttribute('disabled')
     setGmaeScore()
-    $start.classList.remove('hide')
+    show($start)
     $game.style.backgroundColor = '#ccc'
     $game.innerHTML = ' '
-    $timeHeader.classList.add('hide')
-    $resultHeader.classList.remove('hide')
+    hide($timeHeader)
+    show($resultHeader)
 
 }
 
